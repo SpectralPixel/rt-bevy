@@ -10,13 +10,18 @@ impl Plugin for InputPlugin {
 }
 
 pub fn input_players(
-    mut player_transforms: Query<(&mut Transform, &mut Direction), With<Player>>,
+    mut player_transforms: Query<
+        (&mut Transform, &mut Direction, &mut RayViewport2D),
+        With<Player>,
+    >,
     keys: Res<ButtonInput<KeyCode>>,
     time: Res<Time>,
     windows: Query<&Window>,
     camera: Query<(&Camera, &GlobalTransform), With<MainCamera>>,
 ) {
-    for (mut player_transform, mut player_direction) in player_transforms.iter_mut() {
+    for (mut player_transform, mut player_direction, mut player_viewport) in
+        player_transforms.iter_mut()
+    {
         let mut velocity: Vec2 = Vec2::ZERO;
         if keys.pressed(KeyCode::KeyD) {
             velocity += Vec2::X;
@@ -42,5 +47,8 @@ pub fn input_players(
         {
             player_point_at(mouse_position, &mut player_transform, &mut player_direction);
         }
+
+        player_viewport
+            .recalculate_viewport(player_transform.translation.truncate(), &player_direction);
     }
 }

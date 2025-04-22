@@ -1,5 +1,5 @@
-use bevy::prelude::*;
 use crate::prelude::*;
+use bevy::prelude::*;
 
 #[derive(Component)]
 pub struct RayViewport2D {
@@ -13,9 +13,16 @@ pub struct RayViewport2D {
 }
 
 impl RayViewport2D {
-    pub fn new(position: Vec2, direction: Direction, fov_degrees: f32, near_plane: f32, ray_count: u16) -> Self {
+    pub fn new(
+        position: Vec2,
+        direction: Direction,
+        fov_degrees: f32,
+        near_plane: f32,
+        ray_count: u16,
+    ) -> Self {
         let fov = fov_degrees.to_radians();
-        let (forward, left_edge_position, right_edge_position) = Self::calculate_vectors(&position, &direction, fov_degrees, near_plane);
+        let (forward, left_edge_position, right_edge_position) =
+            Self::calculate_vectors(&position, &direction, fov_degrees, near_plane);
         Self {
             position,
             forward,
@@ -27,16 +34,26 @@ impl RayViewport2D {
         }
     }
 
-    pub fn cast_rays(&self, mut gizmos: Gizmos) {
+    pub fn cast_rays(&self, mut gizmos: &mut Gizmos) {
         for i in 0..self.ray_count {
             let t = (i as f32 + 0.5) / self.ray_count as f32;
             let ray_position = self.left_edge_position.lerp(self.right_edge_position, t);
             let ray = Ray::new(self.position, ray_position);
-            ray.draw_gizmo(&mut gizmos, 50.0);
+            ray.draw_gizmo(&mut gizmos, 75.0);
         }
+        gizmos.line_2d(
+            self.left_edge_position.clone(),
+            self.right_edge_position.clone(),
+            Color::linear_rgb(0., 0., 1.),
+        );
     }
 
-    pub fn calculate_vectors(position: &Vec2, direction: &Direction, fov: f32, near_plane: f32) -> (Vec2, Vec2, Vec2) {
+    pub fn calculate_vectors(
+        position: &Vec2,
+        direction: &Direction,
+        fov: f32,
+        near_plane: f32,
+    ) -> (Vec2, Vec2, Vec2) {
         let forward = Vec2::from_angle(direction.get()).normalize();
         let left = forward.perp();
         let right = -left;
@@ -45,8 +62,9 @@ impl RayViewport2D {
         (forward, left_edge_position, right_edge_position)
     }
 
-    pub fn recalculate_viewport(&mut self, position: Vec2, direction: Direction) {
-        let (forward, left_edge_position, right_edge_position) = Self::calculate_vectors(&position, &direction, self.fov, self.near_plane);
+    pub fn recalculate_viewport(&mut self, position: Vec2, direction: &Direction) {
+        let (forward, left_edge_position, right_edge_position) =
+            Self::calculate_vectors(&position, &direction, self.fov, self.near_plane);
         self.position = position;
         self.forward = forward;
         self.left_edge_position = left_edge_position;

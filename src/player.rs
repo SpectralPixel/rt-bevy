@@ -7,7 +7,7 @@ pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, player_initialize);
-        app.add_systems(Update, forward_gizmo);
+        app.add_systems(Update, viewport_gizmo);
     }
 }
 
@@ -18,6 +18,7 @@ pub fn player_initialize(mut commands: Commands, asset_server: Res<AssetServer>)
     commands.spawn((
         Player,
         Direction::new(0.),
+        RayViewport2D::new(Vec2::ZERO, Direction::new(0.), 70., 20., 5),
         Sprite::from_image(asset_server.load("samplecircle16.png")),
     ));
 }
@@ -39,15 +40,8 @@ pub fn player_point_at(
     player_direction.set(angle);
 }
 
-fn forward_gizmo(
-    mut gizmos: Gizmos,
-    player_transforms: Query<(&Transform, &Direction), With<Player>>,
-) {
-    for (transform, direction) in player_transforms.iter() {
-        let forward = Vec2::from_angle(direction.get());
-        let cur_pos = transform.translation.truncate();
-        let end_pos = cur_pos + forward * 50.0;
-        let color_red = Color::linear_rgb(1., 0., 0.);
-        gizmos.arrow_2d(cur_pos, end_pos, color_red);
+fn viewport_gizmo(mut gizmos: Gizmos, player_transforms: Query<&RayViewport2D, With<Player>>) {
+    for viewport in player_transforms.iter() {
+        viewport.cast_rays(&mut gizmos);
     }
 }

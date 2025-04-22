@@ -1,4 +1,4 @@
-use crate::{player, prelude::*};
+use crate::prelude::*;
 use bevy::prelude::*;
 
 pub struct InputPlugin;
@@ -10,13 +10,13 @@ impl Plugin for InputPlugin {
 }
 
 pub fn input_players(
-    mut player_transforms: Query<&mut Transform, With<Player>>,
+    mut player_transforms: Query<(&mut Transform, &mut Direction), With<Player>>,
     keys: Res<ButtonInput<KeyCode>>,
     time: Res<Time>,
     windows: Query<&Window>,
-    camera_q: Query<(&Camera, &GlobalTransform), With<MainCamera>>,
+    camera: Query<(&Camera, &GlobalTransform), With<MainCamera>>,
 ) {
-    for mut player_transform in player_transforms.iter_mut() {
+    for (mut player_transform, mut player_direction) in player_transforms.iter_mut() {
         let mut velocity: Vec2 = Vec2::ZERO;
         if keys.pressed(KeyCode::KeyD) {
             velocity += Vec2::X;
@@ -30,17 +30,17 @@ pub fn input_players(
         if keys.pressed(KeyCode::KeyS) {
             velocity += Vec2::NEG_Y;
         }
-        player::player_translate(velocity.normalize_or_zero(), &mut player_transform, &time);
+        player_translate(velocity.normalize_or_zero(), &mut player_transform, &time);
 
         let window = windows.single();
-        let (camera, camera_transform) = camera_q.single();
+        let (camera, camera_transform) = camera.single();
 
         // Only run if the cursor is in the window
         if let Some(mouse_position) = window
             .cursor_position()
             .and_then(|cursor| camera.viewport_to_world_2d(camera_transform, cursor).ok())
         {
-            player::player_point_at(mouse_position, &mut player_transform);
+            player_point_at(mouse_position, &mut player_transform, &mut player_direction);
         }
     }
 }

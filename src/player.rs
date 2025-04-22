@@ -1,6 +1,7 @@
 use std::f32::consts::PI;
 
 use bevy::prelude::*;
+use crate::prelude::*;
 
 const PLAYER_SPEED: f32 = 100.;
 pub struct PlayerPlugin;
@@ -17,6 +18,7 @@ pub struct Player;
 pub fn player_initialize(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn((
         Player,
+        Direction::new(0.),
         Sprite::from_image(asset_server.load("samplecircle16.png")),
     ));
 }
@@ -28,12 +30,12 @@ pub fn player_translate(velocity: Vec2, transform: &mut Transform, time: &Res<Ti
     //println!("Player position: {:?}", transform.translation);
 }
 
-pub fn player_point_at(target_position: Vec2, transform: &mut Transform) {
+pub fn player_point_at(target_position: Vec2, transform: &mut Transform, player_direction: &mut Direction) {
     let direction = target_position - transform.translation.truncate();
     let angle = direction.y.atan2(direction.x);
     transform.rotation = Quat::from_rotation_z(angle);
-    //println!("Player rotation: {:?}", transform.rotation.to_axis_angle());
-    println!("Player rotation: {:?}", calculate_angle(transform));
+    player_direction.set(calculate_angle(transform));
+    // println!("Player rotation: {:?}", transform.rotation.to_axis_angle());
 }
 
 fn calculate_angle(transform: &Transform) -> f32 {

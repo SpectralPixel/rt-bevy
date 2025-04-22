@@ -1,4 +1,4 @@
-use std::f32::consts::PI;
+use std::f32::consts::TAU;
 
 use bevy::prelude::*;
 use crate::prelude::*;
@@ -42,5 +42,5 @@ fn calculate_angle(transform: &Transform) -> f32 {
     let rot = transform.rotation.to_axis_angle();
     let p = rot.0.z;
     let q = rot.1;
-    ((-p).clamp(0., 1.) * 2. * PI - q).abs()
+    (-p).clamp(0., 1.) * TAU + q * p
 }

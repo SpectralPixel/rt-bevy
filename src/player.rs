@@ -7,6 +7,7 @@ pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, player_initialize);
+        app.add_systems(Update, forward_gizmo);
     }
 }
 
@@ -34,4 +35,11 @@ pub fn player_point_at(target_position: Vec2, transform: &mut Transform, player_
     transform.rotation = Quat::from_rotation_z(angle);
     player_direction.set(angle);
     // println!("Player rotation: {:?}", transform.rotation.to_axis_angle());
+}
+
+fn forward_gizmo(mut gizmos: Gizmos, player_direction: Query<(&Transform, &Direction), With<Player>>) {
+    for (transform, direction) in player_direction.iter() {
+        let forward = Vec2::new(direction.get().cos(), direction.get().sin()) * 50.0;
+        gizmos.arrow_2d(transform.translation.truncate(), transform.translation.truncate() + forward, Color::linear_rgb(1., 0., 0.));
+    }
 }

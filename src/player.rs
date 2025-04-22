@@ -1,5 +1,3 @@
-use std::f32::consts::TAU;
-
 use bevy::prelude::*;
 use crate::prelude::*;
 
@@ -34,13 +32,6 @@ pub fn player_point_at(target_position: Vec2, transform: &mut Transform, player_
     let direction = target_position - transform.translation.truncate();
     let angle = direction.y.atan2(direction.x);
     transform.rotation = Quat::from_rotation_z(angle);
-    player_direction.set(calculate_angle(transform));
+    player_direction.set(angle);
     // println!("Player rotation: {:?}", transform.rotation.to_axis_angle());
-}
-
-fn calculate_angle(transform: &Transform) -> f32 {
-    let rot = transform.rotation.to_axis_angle();
-    let p = rot.0.z;
-    let q = rot.1;
-    (-p).clamp(0., 1.) * TAU + q * p
 }

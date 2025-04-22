@@ -17,6 +17,10 @@ impl Ray {
         }
     }
 
+    pub fn position(&self) -> Vec2 {
+        self.origin + self.direction * self.length
+    }
+
     pub fn draw_gizmo(&self, mut gizmos: Gizmos, length: f32) {
         gizmos.arrow_2d(
             self.origin,

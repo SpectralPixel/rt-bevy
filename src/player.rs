@@ -26,7 +26,6 @@ pub fn player_translate(velocity: Vec2, transform: &mut Transform, time: &Res<Ti
     let delta_time = time.delta().as_secs_f32();
     transform.translation.x += velocity.x * PLAYER_SPEED * delta_time;
     transform.translation.y += velocity.y * PLAYER_SPEED * delta_time;
-    //println!("Player position: {:?}", transform.translation);
 }
 
 pub fn player_point_at(target_position: Vec2, transform: &mut Transform, player_direction: &mut Direction) {
@@ -34,7 +33,6 @@ pub fn player_point_at(target_position: Vec2, transform: &mut Transform, player_
     let angle = direction.y.atan2(direction.x);
     transform.rotation = Quat::from_rotation_z(angle);
     player_direction.set(angle);
-    // println!("Player rotation: {:?}", transform.rotation.to_axis_angle());
 }
 
 fn forward_gizmo(mut gizmos: Gizmos, player_direction: Query<(&Transform, &Direction), With<Player>>) {

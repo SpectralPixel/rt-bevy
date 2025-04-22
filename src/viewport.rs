@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 use crate::prelude::*;
 
+#[derive(Component)]
 pub struct RayViewport2D {
     origin: Vec2,
     direction: Direction, // implement Into<Vec2> for Direction

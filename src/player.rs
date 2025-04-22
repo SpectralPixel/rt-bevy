@@ -1,5 +1,5 @@
-use bevy::prelude::*;
 use crate::prelude::*;
+use bevy::prelude::*;
 
 const PLAYER_SPEED: f32 = 100.;
 pub struct PlayerPlugin;
@@ -28,7 +28,11 @@ pub fn player_translate(velocity: Vec2, transform: &mut Transform, time: &Res<Ti
     transform.translation.y += velocity.y * PLAYER_SPEED * delta_time;
 }
 
-pub fn player_point_at(target_position: Vec2, transform: &mut Transform, player_direction: &mut Direction) {
+pub fn player_point_at(
+    target_position: Vec2,
+    transform: &mut Transform,
+    player_direction: &mut Direction,
+) {
     let direction = target_position - transform.translation.truncate();
     let angle = direction.y.atan2(direction.x);
     transform.rotation = Quat::from_rotation_z(angle);

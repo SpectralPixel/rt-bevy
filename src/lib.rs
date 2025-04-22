@@ -3,10 +3,10 @@ use bevy::prelude::*;
 pub mod prelude;
 
 mod camera;
+mod direction;
 mod input;
 mod player;
 mod ray;
-mod direction;
 
 pub struct SetupGamePlugin;
 

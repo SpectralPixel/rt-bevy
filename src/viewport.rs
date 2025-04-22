@@ -4,7 +4,6 @@ use crate::prelude::*;
 #[derive(Component)]
 pub struct RayViewport2D {
     position: Vec2,
-    direction: Direction, // implement Into<Vec2> for Direction
     forward: Vec2,
     fov: f32,
     near_plane: f32, // near clipping plane distance
@@ -19,7 +18,6 @@ impl RayViewport2D {
         let (forward, left_edge_position, right_edge_position) = Self::calculate_vectors(&position, &direction, fov_degrees, near_plane);
         Self {
             position,
-            direction,
             forward,
             fov,
             near_plane,
@@ -50,7 +48,6 @@ impl RayViewport2D {
     pub fn recalculate_viewport(&mut self, position: Vec2, direction: Direction) {
         let (forward, left_edge_position, right_edge_position) = Self::calculate_vectors(&position, &direction, self.fov, self.near_plane);
         self.position = position;
-        self.direction = direction;
         self.forward = forward;
         self.left_edge_position = left_edge_position;
         self.right_edge_position = right_edge_position;

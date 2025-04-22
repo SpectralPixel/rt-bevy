@@ -25,6 +25,6 @@ impl From<Quat> for Direction {
         let p = rot.0.z;
         let q = rot.1;
         let angle = (-p).clamp(0., 1.) * TAU + q * p;
-        Self(angle)
+        Self::new(angle)
     }
 }

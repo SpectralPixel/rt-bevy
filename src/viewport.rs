@@ -31,4 +31,13 @@ impl RayViewport2D {
             right_edge_position,
         }
     }
+
+    pub fn cast_rays(&self, mut gizmos: Gizmos) {
+        for i in 0..self.ray_count {
+            let t = (i as f32 + 0.5) / self.ray_count as f32;
+            let ray_position = self.left_edge_position.lerp(self.right_edge_position, t);
+            let ray = Ray::new(self.origin, ray_position);
+            ray.draw_gizmo(&mut gizmos, 50.0);
+        }
+    }
 }

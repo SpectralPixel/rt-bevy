@@ -21,7 +21,7 @@ impl Ray {
         self.origin + self.direction * self.length
     }
 
-    pub fn draw_gizmo(&self, mut gizmos: Gizmos, length: f32) {
+    pub fn draw_gizmo(&self, gizmos: &mut Gizmos, length: f32) {
         gizmos.arrow_2d(
             self.origin,
             self.origin + self.direction * length,

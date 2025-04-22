@@ -35,9 +35,15 @@ pub fn player_point_at(target_position: Vec2, transform: &mut Transform, player_
     player_direction.set(angle);
 }
 
-fn forward_gizmo(mut gizmos: Gizmos, player_direction: Query<(&Transform, &Direction), With<Player>>) {
-    for (transform, direction) in player_direction.iter() {
-        let forward = Vec2::new(direction.get().cos(), direction.get().sin()) * 50.0;
-        gizmos.arrow_2d(transform.translation.truncate(), transform.translation.truncate() + forward, Color::linear_rgb(1., 0., 0.));
+fn forward_gizmo(
+    mut gizmos: Gizmos,
+    player_transforms: Query<(&Transform, &Direction), With<Player>>,
+) {
+    for (transform, direction) in player_transforms.iter() {
+        let forward = Vec2::from_angle(direction.get());
+        let cur_pos = transform.translation.truncate();
+        let end_pos = cur_pos + forward * 50.0;
+        let color_red = Color::linear_rgb(1., 0., 0.);
+        gizmos.arrow_2d(cur_pos, end_pos, color_red);
     }
 }

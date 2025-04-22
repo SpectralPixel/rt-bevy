@@ -14,12 +14,10 @@ impl Direction {
 
     pub fn set(&mut self, angle: f32) {
         self.0 = angle;
-        println!("Player rotation: {:?}", self.0);
     }
 
     pub fn set_from_quat(&mut self, quat: Quat) {
         *self = Self::from(quat);
-        println!("Player rotation: {:?}", self.0);
     }
 }
 

@@ -7,6 +7,7 @@ mod direction;
 mod input;
 mod player;
 mod ray;
+mod viewport;
 
 pub struct SetupGamePlugin;
 

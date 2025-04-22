@@ -1,22 +1,26 @@
 use bevy::prelude::*;
 
 pub struct Ray {
-    pub position: Vec2,
-    pub direction: Vec2,
+    origin: Vec2,
+    direction: Vec2, // is to be normalized
+    length: f32,
 }
 
 impl Ray {
-    pub fn new(position: Vec2, direction: Vec2) -> Self {
+    pub fn new(origin: Vec2, target: Vec2) -> Self {
+        let direction = (target - origin).normalize();
+        assert_ne!(direction, Vec2::ZERO, "Ray direction cannot be zero!");
         Self {
-            position,
+            origin,
             direction,
+            length: 0.,
         }
     }
 
     pub fn draw_gizmo(&self, mut gizmos: Gizmos, length: f32) {
         gizmos.arrow_2d(
-            self.position,
-            self.position + self.direction * length,
+            self.origin,
+            self.origin + self.direction * length,
             Color::linear_rgb(1., 0., 0.),
         );
     }

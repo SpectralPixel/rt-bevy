@@ -10,13 +10,13 @@ pub struct RayViewport2D {
 }
 
 impl RayViewport2D {
-    pub fn new(origin: Vec2, direction: Direction, fov: f32, ray_count: u16) -> Self {
+    pub fn new(origin: Vec2, direction: Direction, fov_degrees: f32, ray_count: u16) -> Self {
         let forward = Vec2::from_angle(direction.get());
         Self {
             origin,
             direction,
             forward,
-            fov,
+            fov: fov_degrees.to_radians(),
             ray_count
         }
     }

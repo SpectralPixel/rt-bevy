@@ -22,7 +22,8 @@ fn initialize(mut commands: Commands) {
 
 impl Grid2D {
     pub fn new(width: usize, height: usize, cell_size: u8) -> Self {
-        let data = Array2D::filled_with(false, width, height);
+        let generator = || rand::random_ratio(1, 5);
+        let data = Array2D::filled_by_row_major(generator, width, height);
         Self { data, cell_size }
     }
 

@@ -7,7 +7,7 @@ pub struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, initialize);
-        app.add_systems(Update, viewport_gizmo);
+        app.add_systems(Update, (viewport_gizmo, grid_pos));
     }
 }
 
@@ -43,5 +43,15 @@ pub fn player_point_at(
 fn viewport_gizmo(mut gizmos: Gizmos, player_transforms: Query<&RayViewport2D, With<Player>>) {
     for viewport in player_transforms.iter() {
         viewport.cast_rays(&mut gizmos);
+    }
+}
+
+fn grid_pos(player_transforms: Query<&Transform, With<Player>>, grid: Query<&Grid2D>) {
+    let grid = grid.single();
+    for player_transform in player_transforms.iter() {
+        println!(
+            "Player position: {:?}",
+            grid.to_grid_pos(player_transform.translation.truncate())
+        );
     }
 }

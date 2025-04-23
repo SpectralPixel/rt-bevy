@@ -1,27 +1,22 @@
-use bevy::prelude::*;
 use crate::prelude::*;
+use bevy::prelude::*;
 
 pub mod prelude;
 
 mod camera;
 mod direction;
+mod grid;
 mod input;
 mod player;
 mod ray;
 mod viewport;
-mod grid;
 
 pub struct SetupGamePlugin;
 
 impl Plugin for SetupGamePlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugins((
-            CameraPlugin,
-            PlayerPlugin,
-            InputPlugin,
-            GridPlugin,
-        ))
-        .add_systems(Update, close_on_esc);
+        app.add_plugins((CameraPlugin, PlayerPlugin, InputPlugin, GridPlugin))
+            .add_systems(Update, close_on_esc);
     }
 }
 

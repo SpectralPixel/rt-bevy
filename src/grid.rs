@@ -1,5 +1,5 @@
-use bevy::prelude::*;
 use array2d::Array2D;
+use bevy::prelude::*;
 
 pub struct GridPlugin;
 
@@ -36,14 +36,16 @@ impl Grid2D {
     }
 
     pub fn draw_gizmo(&self, gizmos: &mut Gizmos) {
-        gizmos.grid_2d(Isometry2d::IDENTITY, UVec2::from((self.width() as u32, self.height() as u32)), Vec2::splat(self.cell_size as f32), Color::linear_rgb(0., 1., 0.));
+        gizmos.grid_2d(
+            Isometry2d::IDENTITY,
+            UVec2::from((self.width() as u32, self.height() as u32)),
+            Vec2::splat(self.cell_size as f32),
+            Color::linear_rgb(0., 1., 0.),
+        );
     }
 }
 
-fn grid_gizmo(
-    mut gizmos: Gizmos,
-    grid_query: Query<&Grid2D>,
-) {
+fn grid_gizmo(mut gizmos: Gizmos, grid_query: Query<&Grid2D>) {
     for grid in grid_query.iter() {
         grid.draw_gizmo(&mut gizmos);
     }

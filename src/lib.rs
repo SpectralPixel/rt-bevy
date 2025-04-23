@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use crate::prelude::*;
 
 pub mod prelude;
 
@@ -15,9 +16,10 @@ pub struct SetupGamePlugin;
 impl Plugin for SetupGamePlugin {
     fn build(&self, app: &mut App) {
         app.add_plugins((
-            camera::CameraPlugin,
-            player::PlayerPlugin,
-            input::InputPlugin,
+            CameraPlugin,
+            PlayerPlugin,
+            InputPlugin,
+            GridPlugin,
         ))
         .add_systems(Update, close_on_esc);
     }

@@ -6,7 +6,7 @@ pub struct PlayerPlugin;
 
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, player_initialize);
+        app.add_systems(Startup, initialize);
         app.add_systems(Update, viewport_gizmo);
     }
 }
@@ -14,7 +14,7 @@ impl Plugin for PlayerPlugin {
 #[derive(Component)]
 pub struct Player;
 
-pub fn player_initialize(mut commands: Commands, asset_server: Res<AssetServer>) {
+fn initialize(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn((
         Player,
         Direction::new(0.),

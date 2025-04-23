@@ -5,11 +5,11 @@ pub struct InputPlugin;
 
 impl Plugin for InputPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, input_players);
+        app.add_systems(Update, player_input);
     }
 }
 
-pub fn input_players(
+fn player_input(
     mut player_transforms: Query<
         (&mut Transform, &mut Direction, &mut RayViewport2D),
         With<Player>,

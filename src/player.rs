@@ -40,8 +40,8 @@ pub fn player_point_at(
     player_direction.set(angle);
 }
 
-fn viewport_gizmo(mut gizmos: Gizmos, player_transforms: Query<&RayViewport2D, With<Player>>) {
-    for viewport in player_transforms.iter() {
+fn viewport_gizmo(mut gizmos: Gizmos, player_viewport: Query<&RayViewport2D, With<Player>>) {
+    for viewport in player_viewport.iter() {
         viewport.cast_rays(&mut gizmos);
     }
 }

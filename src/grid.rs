@@ -6,7 +6,7 @@ pub struct GridPlugin;
 impl Plugin for GridPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, initialize);
-        //app.add_systems(Update, viewport_gizmo);
+        app.add_systems(Update, grid_gizmo);
     }
 }
 
@@ -33,5 +33,18 @@ impl Grid2D {
 
     pub fn height(&self) -> usize {
         self.data.column_len()
+    }
+
+    pub fn draw_gizmo(&self, gizmos: &mut Gizmos) {
+        gizmos.grid_2d(Isometry2d::IDENTITY, UVec2::from((self.width() as u32, self.height() as u32)), Vec2::splat(self.cell_size as f32), Color::linear_rgb(0., 1., 0.));
+    }
+}
+
+fn grid_gizmo(
+    mut gizmos: Gizmos,
+    grid_query: Query<&Grid2D>,
+) {
+    for grid in grid_query.iter() {
+        grid.draw_gizmo(&mut gizmos);
     }
 }

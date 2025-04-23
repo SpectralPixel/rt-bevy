@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+array2d = "0.3.2"
 bevy = { version = "0.15.3", features = ["dynamic_linking"] } # disable dynamic linking on ship
 
 # Enable a small amount of optimization in the dev profile.

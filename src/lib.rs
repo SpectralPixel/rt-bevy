@@ -8,6 +8,7 @@ mod input;
 mod player;
 mod ray;
 mod viewport;
+mod grid;
 
 pub struct SetupGamePlugin;
 

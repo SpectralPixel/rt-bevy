@@ -39,6 +39,24 @@ impl Grid2D {
         self.cell_size
     }
 
+    pub fn to_grid_pos(&self, world_pos: Vec2) -> Option<Vec2> {
+        let cell_size = self.cell_size as f32;
+        let half_width = self.width() as f32 / 2. * cell_size;
+        let half_height = self.height() as f32 / 2. * cell_size;
+
+        if world_pos.x < -half_width
+            || world_pos.x > half_width
+            || world_pos.y < -half_height
+            || world_pos.y > half_height
+        {
+            return None;
+        }
+
+        let x = ((world_pos.x + half_width) / cell_size).floor();
+        let y = ((world_pos.y + half_height) / cell_size).floor();
+        Some(Vec2::new(x, y))
+    }
+
     pub fn draw_gizmo(&self, gizmos: &mut Gizmos) {
         gizmos.grid_2d(
             Isometry2d::IDENTITY,

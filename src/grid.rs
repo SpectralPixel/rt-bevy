@@ -17,7 +17,7 @@ pub struct Grid2D {
 }
 
 fn initialize(mut commands: Commands) {
-    commands.spawn(Grid2D::new(15, 15, 5));
+    commands.spawn(Grid2D::new(15, 15, 40));
 }
 
 impl Grid2D {

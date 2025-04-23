@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use array2d::Array2D;
 
 pub struct GridPlugin;
 
@@ -11,21 +12,17 @@ impl Plugin for GridPlugin {
 
 #[derive(Component)]
 pub struct Grid2D {
-    width: f32,
-    height: f32,
-    cell_size: f32,
+    data: Array2D<bool>,
+    cell_size: u8,
 }
 
 fn initialize(mut commands: Commands) {
-    commands.spawn(Grid2D::new(15., 15., 50.));
+    commands.spawn(Grid2D::new(15, 15, 5));
 }
 
 impl Grid2D {
-    pub fn new(width: f32, height: f32, cell_size: f32) -> Self {
-        Self {
-            width,
-            height,
-            cell_size,
-        }
+    pub fn new(width: usize, height: usize, cell_size: u8) -> Self {
+        let data = Array2D::filled_with(false, width, height);
+        Self { data, cell_size }
     }
 }

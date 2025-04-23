@@ -25,4 +25,12 @@ impl Grid2D {
         let data = Array2D::filled_with(false, width, height);
         Self { data, cell_size }
     }
+
+    pub fn width(&self) -> usize {
+        self.data.row_len()
+    }
+
+    pub fn height(&self) -> usize {
+        self.data.column_len()
+    }
 }

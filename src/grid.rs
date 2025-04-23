@@ -35,6 +35,10 @@ impl Grid2D {
         self.data.column_len()
     }
 
+    pub fn cell_size(&self) -> u8 {
+        self.cell_size
+    }
+
     pub fn draw_gizmo(&self, gizmos: &mut Gizmos) {
         gizmos.grid_2d(
             Isometry2d::IDENTITY,

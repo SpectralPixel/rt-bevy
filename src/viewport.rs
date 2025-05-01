@@ -34,12 +34,24 @@ impl RayViewport2D {
         }
     }
 
-    pub fn cast_rays(&self, mut gizmos: &mut Gizmos) {
+    pub fn cast_rays(&self, mut gizmos: &mut Gizmos, grid: &Grid2D) {
         for i in 0..self.ray_count {
             let t = (i as f32 + 0.5) / self.ray_count as f32;
             let ray_position = self.left_edge_position.lerp(self.right_edge_position, t);
-            let ray = Ray::new(self.position, ray_position);
-            ray.draw_gizmo(&mut gizmos, 75.0);
+            let ray_direction = (ray_position - self.position).normalize();
+            let mut ray: Ray = Ray::new(ray_position, ray_direction);
+
+            let mut is_solid;
+            for _ in 0..50 {
+                is_solid = match ray.step(&grid) {
+                    Some(v) => v,
+                    None => break,
+                };
+                if is_solid {
+                    break;
+                }
+            }
+            ray.draw_gizmo(&mut gizmos);
         }
         gizmos.line_2d(
             self.left_edge_position.clone(),

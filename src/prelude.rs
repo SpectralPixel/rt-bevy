@@ -1,6 +1,7 @@
 pub use crate::SetupGamePlugin;
 pub use crate::camera::*;
 pub use crate::direction::*;
+pub use crate::grid::coord::*;
 pub use crate::grid::*;
 pub use crate::input::*;
 pub use crate::player::*;

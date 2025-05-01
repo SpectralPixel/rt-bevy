@@ -1,7 +1,10 @@
+use crate::prelude::*;
 use array2d::Array2D;
 use bevy::prelude::*;
 
 pub struct GridPlugin;
+
+pub mod coord;
 
 impl Plugin for GridPlugin {
     fn build(&self, app: &mut App) {
@@ -39,7 +42,13 @@ impl Grid2D {
         self.cell_size
     }
 
-    pub fn to_grid_pos(&self, world_pos: Vec2) -> Option<Vec2> {
+    pub fn get(&self, pos: &Coord) -> Option<bool> {
+        let x = pos.x() as usize;
+        let y = pos.y() as usize;
+        self.data.get(x, y).map(|v| v.clone())
+    }
+
+    pub fn to_grid_pos(&self, world_pos: Vec2) -> Option<Coord> {
         let cell_size = self.cell_size as f32;
         let half_width = self.width() as f32 / 2. * cell_size;
         let half_height = self.height() as f32 / 2. * cell_size;
@@ -52,9 +61,9 @@ impl Grid2D {
             return None;
         }
 
-        let x = ((world_pos.x + half_width) / cell_size).floor();
-        let y = ((world_pos.y + half_height) / cell_size).floor();
-        Some(Vec2::new(x, y))
+        let x = (world_pos.x + half_width) / cell_size;
+        let y = (world_pos.y + half_height) / cell_size;
+        Some(Coord::new(x, y))
     }
 
     pub fn draw_gizmo(&self, gizmos: &mut Gizmos) {
@@ -64,21 +73,28 @@ impl Grid2D {
             Vec2::splat(self.cell_size as f32),
             Color::linear_rgb(0., 1., 0.),
         );
-        self.data.rows_iter().enumerate().for_each(|(row, row_data)| {
-            row_data.enumerate().for_each(|(col, cell)| {
-                if *cell {
+
+        let mut debug_buffer = String::from("WHERE TRUE: ");
+        for col in 0..self.height() {
+            for row in 0..self.width() {
+                let coord = Coord::new(row as f32, col as f32);
+                if self.get(&coord).unwrap() {
+                    debug_buffer.push_str(&format!("({:?}) ", coord));
                     use std::f32::consts::SQRT_2;
                     let cell_size = self.cell_size as f32;
-                    let row = row as f32;
-                    let col = col as f32;
                     let half_width = self.width() as f32 / 2.;
                     let half_height = self.height() as f32 / 2.;
-                    let x = (col - half_width + 0.5) * cell_size;
-                    let y = (row - half_height + 0.5) * cell_size;
-                    gizmos.cross_2d(Isometry2d::new(Vec2::new(x, y), Rot2::degrees(45.)), cell_size / 2. * SQRT_2, Color::linear_rgb(0., 1., 0.));
+                    let x = (coord.x() - half_width + 0.5) * cell_size;
+                    let y = (coord.y() - half_height + 0.5) * cell_size;
+                    gizmos.cross_2d(
+                        Isometry2d::new(Vec2::new(x, y), Rot2::degrees(45.)),
+                        cell_size / 2. * SQRT_2,
+                        Color::linear_rgb(0., 1., 0.),
+                    );
                 }
-            });
-        });
+            }
+        }
+        println!("{}", debug_buffer);
     }
 }
 

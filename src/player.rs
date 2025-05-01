@@ -18,7 +18,7 @@ fn initialize(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn((
         Player,
         Direction::new(0.),
-        RayViewport2D::new(Vec2::ZERO, Direction::new(0.), 70., 20., 5),
+        RayViewport2D::new(Vec2::ZERO, Direction::new(0.), 90., 7., 25),
         Sprite::from_image(asset_server.load("samplecircle16.png")),
     ));
 }
@@ -40,18 +40,28 @@ pub fn player_point_at(
     player_direction.set(angle);
 }
 
-fn viewport_gizmo(mut gizmos: Gizmos, player_viewport: Query<&RayViewport2D, With<Player>>) {
+fn viewport_gizmo(
+    mut gizmos: Gizmos,
+    player_viewport: Query<&RayViewport2D, With<Player>>,
+    grid: Query<&Grid2D>,
+) {
+    let grid = grid.single();
     for viewport in player_viewport.iter() {
-        viewport.cast_rays(&mut gizmos);
+        viewport.cast_rays(&mut gizmos, &grid);
     }
 }
 
 fn grid_pos(player_transforms: Query<&Transform, With<Player>>, grid: Query<&Grid2D>) {
     let grid = grid.single();
     for player_transform in player_transforms.iter() {
+        let player_pos = grid
+            .to_grid_pos(player_transform.translation.truncate())
+            .unwrap()
+            .floor();
         println!(
-            "Player position: {:?}",
-            grid.to_grid_pos(player_transform.translation.truncate())
+            "Player position: {:?} ; {}",
+            player_pos,
+            grid.get(&player_pos).unwrap_or_default()
         );
     }
 }

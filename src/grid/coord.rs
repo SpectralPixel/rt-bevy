@@ -27,8 +27,8 @@ impl From<Vec2> for Coord {
     }
 }
 
-impl Into<Vec2> for Coord {
-    fn into(self) -> Vec2 {
-        self.0
+impl From<Coord> for Vec2 {
+    fn from(value: Coord) -> Self {
+        value.0
     }
 }

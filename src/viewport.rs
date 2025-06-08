@@ -34,7 +34,7 @@ impl RayViewport2D {
         }
     }
 
-    pub fn cast_rays(&self, mut gizmos: &mut Gizmos, grid: &Grid2D) {
+    pub fn cast_rays(&self, gizmos: &mut Gizmos, grid: &Grid2D) {
         for i in 0..self.ray_count {
             let t = (i as f32 + 0.5) / self.ray_count as f32;
             let ray_position = self.left_edge_position.lerp(self.right_edge_position, t);
@@ -43,7 +43,7 @@ impl RayViewport2D {
 
             let mut is_solid;
             for _ in 0..50 {
-                is_solid = match ray.step(&grid) {
+                is_solid = match ray.step(grid) {
                     Some(v) => v,
                     None => break,
                 };
@@ -51,11 +51,11 @@ impl RayViewport2D {
                     break;
                 }
             }
-            ray.draw_gizmo(&mut gizmos);
+            ray.draw_gizmo(gizmos);
         }
         gizmos.line_2d(
-            self.left_edge_position.clone(),
-            self.right_edge_position.clone(),
+            self.left_edge_position,
+            self.right_edge_position,
             Color::linear_rgb(0., 0., 1.),
         );
     }
@@ -76,7 +76,7 @@ impl RayViewport2D {
 
     pub fn recalculate_viewport(&mut self, position: Vec2, direction: &Direction) {
         let (forward, left_edge_position, right_edge_position) =
-            Self::calculate_vectors(&position, &direction, self.fov, self.near_plane);
+            Self::calculate_vectors(&position, direction, self.fov, self.near_plane);
         self.position = position;
         self.forward = forward;
         self.left_edge_position = left_edge_position;

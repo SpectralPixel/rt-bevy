@@ -31,7 +31,7 @@ impl Ray {
         self.length += distance_a.min(distance_b) + 0.001;
 
         let hit_cell = grid.to_grid_pos(self.position())?.floor();
-        Some(grid.get(&hit_cell)?)
+        grid.get(&hit_cell)
     }
 
     pub fn draw_gizmo(&self, gizmos: &mut Gizmos) {

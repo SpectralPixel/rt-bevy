@@ -45,7 +45,7 @@ impl Grid2D {
     pub fn get(&self, pos: &Coord) -> Option<bool> {
         let x = pos.x() as usize;
         let y = pos.y() as usize;
-        self.data.get(x, y).map(|v| v.clone())
+        self.data.get(x, y).cloned()
     }
 
     pub fn to_grid_pos(&self, world_pos: Vec2) -> Option<Coord> {

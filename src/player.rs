@@ -47,7 +47,7 @@ fn viewport_gizmo(
 ) {
     let grid = grid.single();
     for viewport in player_viewport.iter() {
-        viewport.cast_rays(&mut gizmos, &grid);
+        viewport.cast_rays(&mut gizmos, grid);
     }
 }
 

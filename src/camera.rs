@@ -14,7 +14,7 @@ pub struct MainCamera;
 pub fn camera_setup(mut commands: Commands) {
     commands.spawn((
         MainCamera,
-        Camera2d::default(),
+        Camera2d,
         Transform::from_translation(Vec3::ZERO),
     ));
 }
